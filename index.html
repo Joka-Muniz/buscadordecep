@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de CEP</title>
+</head>
+<body>
+    <h1>Buscador de CEP</h1>
+    <input type="text" id="cep" maxlength="8" placeholder="Digite o CEP">
+    <button type="button" onclick="buscarCEP()">Buscar</button>
+    <div id="endereco"></div>
+
+    <script>
+        function buscarCEP() {
+            const cepInput = document.getElementById("cep").value;
+            fetch(`https://viacep.com.br/ws/${cepInput}/json/`)
+                .then((resposta) => resposta.json())
+                .then((dados) => {
+                    const mensagem = (dados.uf !== 'SP') 
+                        ? "Esse endereço não pertence ao estado de São Paulo."
+                        : `CEP: ${dados.cep}, ${dados.logradouro}, ${dados.bairro}, ${dados.localidade} - ${dados.uf}`;
+                    document.getElementById('endereco').innerText = mensagem;
+                })
+                .catch(() => {
+                    document.getElementById('endereco').innerText = "O CEP não pertence ao Estado de SP.";
+                });
+        }
+    </script>
+</body>
+</html>
